@@ -1,0 +1,17 @@
+# Local tries only (`docker compose up --build`). The NAS runs deploy/portainer-stack.yml.
+services:
+  verso:
+    build: .
+    image: ghcr.io/ewolution94/verso:latest
+    container_name: verso
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
+      - VERSO_ORIGIN=http://127.0.0.1:8080
+    volumes:
+      - verso-data:/data
+
+volumes:
+  verso-data:

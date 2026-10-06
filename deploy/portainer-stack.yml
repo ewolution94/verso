@@ -1,0 +1,46 @@
+# The Verso stack Portainer runs on the NAS.
+#
+# This is deliberately NOT the repo's docker-compose.yml. That one carries `build: .`,
+# which would make Portainer compile Verso on the NAS instead of pulling the image
+# CI already published.
+#
+# Auto-updates come from the shared Watchtower stack (clinch/deploy/watchtower-stack.yml),
+# which only touches containers carrying the label below. With it, a push to `release`
+# is the entire deploy.
+
+services:
+  verso:
+    image: ghcr.io/ewolution94/verso:latest
+    container_name: verso
+    restart: unless-stopped
+    ports:
+      # The port registry: development/.claude/skills/portainer/ports.json.
+      - "5900:5900"
+    environment:
+      - PORT=5900
+      - TZ=Europe/Berlin
+      # The Spotify app's client ID (not a secret with PKCE, but kept out of git); set it under
+      # the stack's environment variables in Portainer.
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID:-}
+      # <origin>/auth/callback must be a redirect URI of the Spotify app.
+      - VERSO_ORIGIN=https://verso.ewolution.cloud
+      - VERSO_MARKET=DE
+      # Visit counts: /_e and /_e.js are forwarded to Census over the `ewolution` network.
+      - VERSO_CENSUS=http://census:4901
+    volumes:
+      # Sessions and the search cache.
+      - verso-data:/data
+    networks:
+      # The shared network Census listens on.
+      - ewolution
+    labels:
+      # The opt-in the shared Watchtower looks for (it runs with
+      # WATCHTOWER_LABEL_ENABLE=true, so unlabelled containers are never touched).
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  ewolution:
+    external: true
+
+volumes:
+  verso-data:

@@ -1,0 +1,55 @@
+name: CI
+
+# Runs on pull requests, and is the gate docker-publish.yml calls before it publishes
+# anything, so the checks guarding a PR and the checks guarding a deploy can't drift apart.
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: Typecheck, test, build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          # Matches the Dockerfile. The unit tests import TypeScript directly (Node's type
+          # stripping) and the server uses node:sqlite, both unflagged in Node 24.
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # The built app served by the real production server, with no Spotify app configured.
+      - name: Smoke test the production server
+        run: |
+          PORT=5999 VERSO_DATA=/tmp/verso-ci node server/server.mjs &
+          for _ in $(seq 1 20); do curl -sf http://127.0.0.1:5999/healthz && break; sleep 0.5; done
+          curl -sf http://127.0.0.1:5999/ | grep -q '<title>Verso</title>'
+          curl -sfI http://127.0.0.1:5999/ | grep -qi "content-security-policy: default-src 'self'"
+          # Without a session the API refuses, and login says it isn't configured.
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:5999/api/me)" = 401
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'content-type: application/json' --data '{"text":"hi"}' http://127.0.0.1:5999/api/match)" = 401
+          test "$(curl -s -o /dev/null -w '%{redirect_url}' http://127.0.0.1:5999/auth/login)" = 'http://127.0.0.1:5999/?login=unconfigured'
+          # The Census forwarder is wired in; without VERSO_CENSUS it answers locally.
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:5999/_e.js)" = 200
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST --data '{}' http://127.0.0.1:5999/_e)" = 204
