@@ -1,6 +1,7 @@
 <script lang="ts">
   import { ArrowUp } from '@lucide/svelte';
   import { app } from '../lib/state.svelte';
+  import { t } from '../lib/i18n/index.svelte';
 
   let field: HTMLTextAreaElement | undefined = $state();
   const changed = $derived(app.text.trim() !== app.query);
@@ -26,7 +27,7 @@
 </script>
 
 <form class="composer" onsubmit={submit}>
-  <label class="visually-hidden" for="message">Message</label>
+  <label class="visually-hidden" for="message">{t('composer.label')}</label>
   <textarea
     id="message"
     bind:this={field}
@@ -37,12 +38,12 @@
     }}
     rows="1"
     maxlength="160"
-    placeholder="Type a message"
+    placeholder={t('composer.placeholder')}
     enterkeyhint="go"
     autocomplete="off"
     spellcheck="false"
   ></textarea>
-  <button class="go" type="submit" aria-label="Find songs" disabled={!app.text.trim() || (!changed && app.searching)}>
+  <button class="go" type="submit" aria-label={t('composer.submit')} disabled={!app.text.trim() || (!changed && app.searching)}>
     <ArrowUp size={22} strokeWidth={2.25} />
   </button>
 </form>

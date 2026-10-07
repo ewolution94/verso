@@ -1,5 +1,7 @@
 <script lang="ts">
+  import '../../vendor/ewo/elements/settings-button.js';
   import { app } from '../lib/state.svelte';
+  import { t } from '../lib/i18n/index.svelte';
 
   let open = $state(false);
   let menu: HTMLElement | undefined = $state();
@@ -16,13 +18,16 @@
   <div class="inner">
     <img class="logo" src="/icon.svg" alt="" width="28" height="28" />
     <span class="mark">Verso</span>
-    {#if app.user?.mock}<span class="mock" title="A stand-in Spotify: nothing here is real">Mock</span>{/if}
+    {#if app.user?.mock}<span class="mock" title={t('header.mockTitle')}>{t('header.mock')}</span>{/if}
+    <!-- The element is a real <button> inside (keys and role included); Svelte can't see into it. -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <ewo-settings-button class="settings" onclick={() => (app.settingsOpen = true)}></ewo-settings-button>
     <div class="me" bind:this={menu}>
-      <button class="avatar" aria-label="Account" aria-haspopup="menu" aria-expanded={open} onclick={() => (open = !open)}>{initial}</button>
+      <button class="avatar" aria-label={t('header.account')} aria-haspopup="menu" aria-expanded={open} onclick={() => (open = !open)}>{initial}</button>
       {#if open}
         <div class="menu" role="menu">
           <p class="who">{app.user?.name}</p>
-          <button role="menuitem" onclick={() => app.logout()}>Log out</button>
+          <button role="menuitem" onclick={() => app.logout()}>{t('header.logout')}</button>
         </div>
       {/if}
     </div>
@@ -70,9 +75,11 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
+  .settings {
+    margin-left: auto;
+  }
   .me {
     position: relative;
-    margin-left: auto;
   }
   .avatar {
     display: grid;

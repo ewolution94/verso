@@ -2,6 +2,7 @@
   import { ExternalLink, Share } from '@lucide/svelte';
   import '../../vendor/ewo/elements/switch.js';
   import { app } from '../lib/state.svelte';
+  import { t, tn } from '../lib/i18n/index.svelte';
 
   const songs = $derived(app.segments.filter((s) => s.tracks.length).length);
   const gaps = $derived(app.segments.length - songs);
@@ -21,29 +22,29 @@
 </script>
 
 {#if app.words.length}
-  <section class="save" aria-label="Save to Spotify">
+  <section class="save" aria-label={t('save.label')}>
     {#if app.saved}
-      <p class="done">Saved to your Spotify{app.saved.public ? '' : ' (private)'}.</p>
+      <p class="done">{t(app.saved.public ? 'save.done' : 'save.donePrivate')}</p>
       <div class="actions">
-        <a class="primary" href={app.saved.url} target="_blank" rel="noopener noreferrer"><ExternalLink size={18} /> Open in Spotify</a>
-        <button class="quiet" onclick={share}><Share size={18} /> {copied ? 'Link copied' : 'Share'}</button>
+        <a class="primary" href={app.saved.url} target="_blank" rel="noopener noreferrer"><ExternalLink size={18} /> {t('save.open')}</a>
+        <button class="quiet" onclick={share}><Share size={18} /> {copied ? t('save.copied') : t('save.share')}</button>
       </div>
     {:else}
       <label class="name">
-        <span>Playlist name</span>
+        <span>{t('save.name')}</span>
         <input bind:value={app.name} maxlength="100" autocomplete="off" enterkeyhint="done" />
       </label>
       <div class="actions">
-        <ewo-switch checked={app.public} onchange={(e) => (app.public = e.detail.checked)}>Public</ewo-switch>
+        <ewo-switch checked={app.public} onchange={(e) => (app.public = e.detail.checked)}>{t('save.public')}</ewo-switch>
         <button class="primary" disabled={app.searching || !songs || app.saving} onclick={() => app.save()}>
-          {app.saving ? 'Creating…' : app.searching ? 'Searching…' : 'Create playlist'}
+          {app.saving ? t('save.creating') : app.searching ? t('playlist.searching') : t('save.create')}
         </button>
       </div>
       {#if gaps && !app.searching}
-        <p class="note">{gaps === 1 ? 'One word has' : `${gaps} words have`} no song and will be left out.</p>
+        <p class="note">{tn('save.gaps', gaps)}</p>
       {/if}
     {/if}
-    {#if app.problem}<p class="problem" role="alert">{app.problem}</p>{/if}
+    {#if app.problem}<p class="problem" role="alert">{t(app.problem)}</p>{/if}
   </section>
 {/if}
 

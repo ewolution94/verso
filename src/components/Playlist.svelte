@@ -4,26 +4,27 @@
   import { Shuffle } from '@lucide/svelte';
   import '../../vendor/ewo/elements/segmented.js';
   import { app } from '../lib/state.svelte';
+  import { t, tn } from '../lib/i18n/index.svelte';
   import type { Mode } from '../lib/segment';
 
   const songs = $derived(app.segments.filter((s) => s.tracks.length));
   const minutes = $derived(Math.round(songs.reduce((sum, s) => sum + (s.tracks[s.pick].ms ?? 0), 0) / 60_000));
+  const modes = $derived([
+    { value: 'fewer', label: t('playlist.fewer') },
+    { value: 'balanced', label: t('playlist.mixed') },
+    { value: 'more', label: t('playlist.more') },
+  ]);
   const share = $derived(app.progress.total ? app.progress.done / app.progress.total : 0);
 </script>
 
 {#if app.words.length}
-  <section class="playlist" aria-label="Playlist" aria-busy={app.searching}>
+  <section class="playlist" aria-label={t('playlist.label')} aria-busy={app.searching}>
     <div class="toolbar">
       <p class="count">
-        {songs.length}
-        {songs.length === 1 ? 'song' : 'songs'}{#if minutes}<span class="dot"> · </span>{minutes} min{/if}
+        {tn('playlist.songs', songs.length)}{#if minutes}<span class="dot"> · </span>{t('playlist.minutes', { minutes })}{/if}
       </p>
-      <ewo-segmented size="sm" label="Song length" value={app.mode} onchange={(e) => app.setMode(e.detail.value as Mode)}>
-        <option value="fewer">Fewer</option>
-        <option value="balanced">Mixed</option>
-        <option value="more">More</option>
-      </ewo-segmented>
-      <button class="icon" aria-label="Shuffle" title="Shuffle" onclick={() => app.shuffle()} disabled={!songs.length}>
+      <ewo-segmented size="sm" label={t('playlist.length')} value={app.mode} options={modes} onchange={(e) => app.setMode(e.detail.value as Mode)}></ewo-segmented>
+      <button class="icon" aria-label={t('playlist.shuffle')} title={t('playlist.shuffle')} onclick={() => app.shuffle()} disabled={!songs.length}>
         <Shuffle size={18} />
       </button>
     </div>
@@ -33,20 +34,21 @@
       {#each app.segments as s (s.key)}
         <li animate:flip={{ duration: 260 }} in:fade={{ duration: 180 }}>
           {#if s.tracks.length}
-            {@const t = s.tracks[s.pick]}
+            {@const song = s.tracks[s.pick]}
             {@const more = s.tracks.length - 1}
+            {@const track = t('playlist.track', { title: song.name, artists: song.artists.join(', ') })}
             <button
               class="row"
               onclick={() => (app.choosing = s.key)}
               disabled={!more}
-              aria-label="{t.name} by {t.artists.join(', ')}{more ? `, ${more} more with this title` : ''}"
+              aria-label={more ? tn('playlist.alternatives', more, { track }) : track}
             >
-              {#if t.image}<img src={t.image} alt="" width="48" height="48" loading="lazy" />{:else}<span class="cover"></span>{/if}
+              {#if song.image}<img src={song.image} alt="" width="48" height="48" loading="lazy" />{:else}<span class="cover"></span>{/if}
               <span class="text">
                 <span class="title">
-                  {#if t.base && t.name.startsWith(t.base)}{t.base}<span class="version">{t.name.slice(t.base.length)}</span>{:else}{t.name}{/if}
+                  {#if song.base && song.name.startsWith(song.base)}{song.base}<span class="version">{song.name.slice(song.base.length)}</span>{:else}{song.name}{/if}
                 </span>
-                <span class="sub">{#if t.explicit}<span class="explicit" aria-label="Explicit">E</span>{/if}{t.artists.join(', ')}</span>
+                <span class="sub">{#if song.explicit}<span class="explicit" aria-label={t('playlist.explicit')}>E</span>{/if}{song.artists.join(', ')}</span>
               </span>
               {#if more}<span class="more" aria-hidden="true">+{more}</span>{/if}
             </button>
@@ -55,7 +57,7 @@
               <span class="cover"></span>
               <span class="text">
                 <span class="title">{app.words[s.i]}</span>
-                <span class="sub">{app.searching ? 'Searching…' : 'No song by this name, left out'}</span>
+                <span class="sub">{app.searching ? t('playlist.searching') : t('playlist.gap')}</span>
               </span>
             </div>
           {/if}

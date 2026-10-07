@@ -2,23 +2,24 @@
   import { Check } from '@lucide/svelte';
   import '../../vendor/ewo/elements/sheet.js';
   import { app } from '../lib/state.svelte';
+  import { t } from '../lib/i18n/index.svelte';
 
   const segment = $derived(app.segments.find((s) => s.key === app.choosing) ?? null);
   const phrase = $derived(segment ? app.words.slice(segment.i, segment.j).join(' ') : '');
   const close = () => (app.choosing = null);
 </script>
 
-<ewo-sheet open={segment !== null} label="Songs called {phrase}" oncancel={close} onclose={close}>
-  <span slot="heading">Songs called “{phrase}”</span>
+<ewo-sheet open={segment !== null} label={t('alternatives.label', { phrase })} oncancel={close} onclose={close}>
+  <span slot="heading">{t('alternatives.heading', { phrase })}</span>
   {#if segment}
     <ul>
-      {#each segment.tracks as t, k (t.id)}
+      {#each segment.tracks as song, k (song.id)}
         <li>
           <button class="option" aria-pressed={k === segment.pick} onclick={() => app.choose(segment.key, k)}>
-            {#if t.image}<img src={t.image} alt="" width="44" height="44" loading="lazy" />{:else}<span class="cover"></span>{/if}
+            {#if song.image}<img src={song.image} alt="" width="44" height="44" loading="lazy" />{:else}<span class="cover"></span>{/if}
             <span class="text">
-              <span class="title">{t.name}</span>
-              <span class="sub">{t.artists.join(', ')}{#if t.album}{` · ${t.album}`}{/if}</span>
+              <span class="title">{song.name}</span>
+              <span class="sub">{song.artists.join(', ')}{#if song.album}{` · ${song.album}`}{/if}</span>
             </span>
             {#if k === segment.pick}<Check size={18} />{/if}
           </button>

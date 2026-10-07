@@ -6,6 +6,7 @@
   import Playlist from './components/Playlist.svelte';
   import Save from './components/Save.svelte';
   import Alternatives from './components/Alternatives.svelte';
+  import Settings from './components/Settings.svelte';
 
   void app.start();
 </script>
@@ -20,6 +21,7 @@
     <Save />
   </main>
   <Alternatives />
+  <Settings />
 {/if}
 
 <style>

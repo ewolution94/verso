@@ -23,6 +23,11 @@ Type a message, get a Spotify playlist whose song titles, read top to bottom, sp
    Running a title across a comma or full stop costs extra; a word no song says becomes a gap and is
    left out. *Shuffle* bends near-equal choices; tapping a song lists the others with that title.
 4. **Saving.** `POST /me/playlists`, then `POST /playlists/{id}/items`. Public by default.
+5. **Settings** (the sliders in the header, as in every ewolution app): Language (System, Deutsch,
+   English) and Theme (System, Light, Dark), stored in this browser (`verso:settings`) and applied
+   under Folio's `themeShift` blur. `public/boot.js` sets a stored theme before first paint. Verso's
+   own texts are in `src/lib/i18n` (English is the source, German is typed against it); song titles
+   are Spotify's and stay as they are.
 
 ### Spotify's development mode (as of February 2026)
 
@@ -88,8 +93,11 @@ server/
 src/
   lib/segment.ts      cutting the message into songs
   lib/state.svelte.ts app state
-  components/         Login, Header, Composer, Playlist, Alternatives (sheet), Save
+  lib/i18n/           en.ts (the source), de.ts, t() and tn()
+  lib/prefs.svelte.ts language and theme, stored in this browser
+  components/         Login, Header, Composer, Playlist, Alternatives and Settings (sheets), Save
 public/sw.js   the offline shell (never touches /auth/ or /api/)
+public/boot.js the stored theme, before first paint
 brand/         the app icon, from development/plans/app-icons (the Field set)
 deploy/        the Portainer stack
 vendor/ewo/    Folio's tokens and elements (vendored, don't edit)

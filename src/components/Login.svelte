@@ -1,14 +1,15 @@
 <script lang="ts">
   import { app } from '../lib/state.svelte';
+  import { t } from '../lib/i18n/index.svelte';
 </script>
 
 <main class="login">
   <img class="logo" src="/icon.svg" alt="" width="64" height="64" />
   <h1 class="mark">Verso</h1>
-  <p class="line">Messages spelled in song titles.</p>
-  <a class="primary" href="/auth/login">Log in with Spotify</a>
-  {#if app.notice}<p class="notice" role="status">{app.notice}</p>{/if}
-  {#if !app.configured}<p class="notice">Set SPOTIFY_CLIENT_ID on the server first, or run <code>npm run mock</code>.</p>{/if}
+  <p class="line">{t('login.line')}</p>
+  <a class="primary" href="/auth/login">{t('login.button')}</a>
+  {#if app.notice}<p class="notice" role="status">{t(app.notice)}</p>{/if}
+  {#if !app.configured}<p class="notice">{t('login.unconfigured')} <code>npm run mock</code>.</p>{/if}
 </main>
 
 <style>
