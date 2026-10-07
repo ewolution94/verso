@@ -41,9 +41,10 @@ var r = t`
   :host([tone='invert']) .indicator { background: var(--ewo-invert); }
   :host([tone='accent']) .indicator { background: var(--ewo-accent); }
 
+  /* Above the indicator by tree order alone (it comes first). No z-index: a z-index here painted the
+     buttons over a sticky header they scrolled under (Cantina's settings, 2026-10-07). */
   button {
     position: relative;
-    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;

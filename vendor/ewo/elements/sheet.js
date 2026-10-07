@@ -65,8 +65,10 @@ var a = t`
   @keyframes unpop { to { opacity: 0; scale: 0.97; } }
   @keyframes fade { from { opacity: 0; } }
 
-  .grip { display: grid; place-items: center; height: 22px; flex: none; touch-action: none; cursor: grab; }
-  .grip span { width: 36px; height: 4px; border-radius: 2px; background: var(--ewo-fill-3); }
+  /* The sheet is dragged down by the grip or the header (2026-10-07: the 22 px grip alone was hard
+     to hit). The grip is 6 px taller and overlaps the header by as much, so nothing below it moves. */
+  .grip { display: grid; place-items: center; height: 28px; margin-bottom: -6px; flex: none; touch-action: none; cursor: grab; }
+  .grip span { width: 44px; height: 5px; border-radius: 3px; background: var(--ewo-fill-3); }
 
   header {
     display: flex;
@@ -74,6 +76,7 @@ var a = t`
     gap: var(--ewo-space-3);
     padding: var(--ewo-space-3) var(--ewo-space-5) var(--ewo-space-2);
   }
+  @media (max-width: 719px) { header { touch-action: none; } }
   @media (min-width: 720px) { header { padding-top: var(--ewo-space-5); } }
   .heading { flex: 1; min-width: 0; font-size: var(--ewo-text-lg); font-weight: 600; }
   .close {
@@ -129,16 +132,18 @@ var a = t`
 			let r = n.assignedElements().length > 0;
 			t.classList.toggle("has", r), e.classList.toggle("with-footer", r);
 		});
-		let r = this.root.querySelector(".grip");
-		r.addEventListener("pointerdown", (t) => {
-			t.pointerType !== "mouse" && (this.#r = t.clientY, e.classList.add("dragging"), r.setPointerCapture(t.pointerId));
-		}), r.addEventListener("pointermove", (t) => {
-			e.classList.contains("dragging") && (this.#i = Math.max(0, t.clientY - this.#r), e.style.setProperty("--drag", `${this.#i}px`));
-		});
-		let i = () => {
-			e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#i > 90 ? this.#a() : e.style.setProperty("--drag", "0px"), this.#i = 0);
-		};
-		r.addEventListener("pointerup", i), r.addEventListener("pointercancel", i);
+		let r = matchMedia("(max-width: 719px)");
+		for (let t of this.root.querySelectorAll(".grip, header")) {
+			t.addEventListener("pointerdown", (n) => {
+				n.pointerType !== "mouse" && r.matches && (n.composedPath()[0].closest?.("button, a, input, select, textarea, label, [contenteditable]") || (this.#r = n.clientY, e.classList.add("dragging"), t.setPointerCapture(n.pointerId)));
+			}), t.addEventListener("pointermove", (t) => {
+				e.classList.contains("dragging") && (this.#i = Math.max(0, t.clientY - this.#r), e.style.setProperty("--drag", `${this.#i}px`));
+			});
+			let n = () => {
+				e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#i > 90 ? this.#a() : e.style.setProperty("--drag", "0px"), this.#i = 0);
+			};
+			t.addEventListener("pointerup", n), t.addEventListener("pointercancel", n);
+		}
 	}
 	connectedCallback() {
 		this.#o();
