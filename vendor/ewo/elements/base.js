@@ -31,15 +31,27 @@ var t = e`
 		}));
 	}
 };
-function r(e, t) {
+function r() {
+	return document.documentElement.lang.toLowerCase().startsWith("de") ? "de" : "en";
+}
+var i = /* @__PURE__ */ new Set(), a;
+function o(e) {
+	return a ??= new MutationObserver(() => i.forEach((e) => e())), i.size || a.observe(document.documentElement, {
+		attributes: !0,
+		attributeFilter: ["lang"]
+	}), i.add(e), () => {
+		i.delete(e), i.size || a?.disconnect();
+	};
+}
+function s(e, t) {
 	customElements.get(e) || customElements.define(e, t);
 }
-var i = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-function a() {
+var c = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+function l() {
 	let e = document.documentElement.dataset.theme;
 	return e === "light" || e === "dark" ? e : matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
 }
-function o(e) {
+function u(e) {
 	let t = matchMedia("(prefers-color-scheme: light)"), n = new MutationObserver(e);
 	return n.observe(document.documentElement, {
 		attributes: !0,
@@ -49,4 +61,4 @@ function o(e) {
 	};
 }
 //#endregion
-export { n as EwoElement, e as css, r as define, a as effectiveTheme, t as hostBase, o as onThemeChange, i as reducedMotion };
+export { n as EwoElement, e as css, s as define, l as effectiveTheme, t as hostBase, o as onPageLanguage, u as onThemeChange, r as pageLanguage, c as reducedMotion };

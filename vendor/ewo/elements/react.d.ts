@@ -10,7 +10,7 @@
 // can produce this from custom-elements.json.
 
 import type { DOMAttributes, HTMLAttributes, Key, Ref } from 'react';
-import type { EwoBadge, EwoEmpty, EwoHalftone, EwoSegmented, EwoSheet, EwoSkeleton, EwoSwitch, EwoThemeToggle, EwoTicks, EwoToaster, SegmentedOption, Tick } from './index';
+import type { EwoBadge, EwoEmpty, EwoHalftone, EwoSegmented, EwoSettingsBasics, EwoSettingsButton, EwoSheet, EwoSkeleton, EwoSwitch, EwoThemeToggle, EwoTicks, EwoToaster, LanguageChoice, SegmentedOption, SettingsThemeChoice, Tick } from './index';
 
 type Base<E> = Omit<HTMLAttributes<E>, 'onChange' | 'onInput' | 'onLoad' | 'onError' | 'onCancel' | 'onClose'> &
   Pick<DOMAttributes<E>, 'children'> & {
@@ -61,6 +61,18 @@ declare module 'react' {
       'ewo-toaster': Base<EwoToaster> & { position?: 'bottom' | 'top' };
       'ewo-sheet': Base<EwoSheet> & { open?: boolean; label?: string; wide?: boolean; placement?: 'center' | 'top'; oncancel?: Handler<void>; onclose?: Handler<void> };
       'ewo-theme-toggle': Base<EwoThemeToggle> & { cycle?: boolean; 'label-light'?: string; 'label-dark'?: string };
+      'ewo-settings-button': Base<EwoSettingsButton> & { label?: string; 'show-label'?: boolean };
+      'ewo-settings-basics': Base<EwoSettingsBasics> & {
+        language?: LanguageChoice;
+        theme?: SettingsThemeChoice;
+        'language-label'?: string;
+        'theme-label'?: string;
+        'system-label'?: string;
+        'light-label'?: string;
+        'dark-label'?: string;
+        'onlanguage-change'?: Handler<{ value: LanguageChoice }>;
+        'ontheme-change'?: Handler<{ value: SettingsThemeChoice }>;
+      };
       'ewo-halftone': Base<EwoHalftone> & { src?: string; alt?: string; cell?: number; color?: 'ink' | 'photo'; fit?: 'cover' | 'contain'; lens?: boolean; ripple?: boolean; origin?: string };
     }
   }

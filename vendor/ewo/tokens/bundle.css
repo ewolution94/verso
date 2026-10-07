@@ -185,6 +185,21 @@
   --ewo-project-census-2:   light-dark(#a77a00, #ffd166);
   --ewo-project-prospekt:   light-dark(#c8183a, #ff6b78);
   --ewo-project-prospekt-2: light-dark(#52525b, #d4d4d8);
+  /* Aale Spiele: the eel's pink and the yellow ball it chases (its app icon, 2026-10-06). */
+  --ewo-project-aale-spiele:   light-dark(#b8137a, #ff62c2);
+  --ewo-project-aale-spiele-2: light-dark(#8a6500, #ffe14d);
+  /* TCGSL: foil gold and the holo teal of its set symbol (its app icon, 2026-10-06); the app
+     itself stays monochrome, the set logos and cards bring the colour. */
+  --ewo-project-tcgsl:   light-dark(#8a6200, #f2c14e);
+  --ewo-project-tcgsl-2: light-dark(#0c7b84, #4fd1d9);
+  /* Schätzle: OTTO's red and its near-black ink (the user works at otto.de; OTTO's design tokens,
+     2026-10-06). The dark side is lightened for contrast on the night page. */
+  --ewo-project-schaetzle:   light-dark(#dc001d, #ff5a68);
+  --ewo-project-schaetzle-2: light-dark(#212121, #f0f0f0);
+  /* Verso: plum, between Axioma's blue-violet and Aale Spiele's pink; its second colour is the
+     icon's dark full stop (lilac at night). */
+  --ewo-project-verso:   light-dark(#7b2598, #d38bea);
+  --ewo-project-verso-2: light-dark(#2b0a38, #f6e0ff);
 }
 
 [data-ewo-project='clinch']  { --ewo-accent: var(--ewo-project-clinch);  --ewo-accent-2: var(--ewo-project-clinch-2); }
@@ -194,6 +209,9 @@
 [data-ewo-project='harbor']  { --ewo-accent: var(--ewo-project-harbor);  --ewo-accent-2: var(--ewo-project-harbor-2); }
 [data-ewo-project='mulpur']  { --ewo-accent: var(--ewo-project-mulpur);  --ewo-accent-2: var(--ewo-project-mulpur-2); }
 [data-ewo-project='fermata'] { --ewo-accent: var(--ewo-project-fermata); --ewo-accent-2: var(--ewo-project-fermata-2); }
+[data-ewo-project='aale-spiele'] { --ewo-accent: var(--ewo-project-aale-spiele); --ewo-accent-2: var(--ewo-project-aale-spiele-2); }
+[data-ewo-project='schaetzle'] { --ewo-accent: var(--ewo-project-schaetzle); --ewo-accent-2: var(--ewo-project-schaetzle-2); }
+[data-ewo-project='verso'] { --ewo-accent: var(--ewo-project-verso); --ewo-accent-2: var(--ewo-project-verso-2); }
 [data-ewo-project='cantina'],
 [data-ewo-project='census'],
 [data-ewo-project='landing'] { --ewo-accent: var(--ewo-fg-2); --ewo-accent-2: var(--ewo-fg); }

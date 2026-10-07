@@ -746,6 +746,287 @@
     },
     {
       "kind": "javascript-module",
+      "path": "settings-basics.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Language and Theme, the first rows of every app's settings.",
+          "name": "EwoSettingsBasics",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[styles]"
+            },
+            {
+              "kind": "field",
+              "name": "#language",
+              "privacy": "private",
+              "type": {
+                "text": "EwoSegmented"
+              },
+              "default": "this.root.querySelector<EwoSegmented>('[part=\"language\"]')!"
+            },
+            {
+              "kind": "field",
+              "name": "#theme",
+              "privacy": "private",
+              "type": {
+                "text": "EwoSegmented"
+              },
+              "default": "this.root.querySelector<EwoSegmented>('[part=\"theme\"]')!"
+            },
+            {
+              "kind": "field",
+              "name": "#languageName",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "this.root.querySelector('#language-name')!"
+            },
+            {
+              "kind": "field",
+              "name": "#themeName",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "this.root.querySelector('#theme-name')!"
+            },
+            {
+              "kind": "field",
+              "name": "language",
+              "type": {
+                "text": "LanguageChoice"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "theme",
+              "type": {
+                "text": "ThemeChoice"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#unwatch",
+              "privacy": "private",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "#sync",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "innerHTML",
+              "default": "` <div class=\"row\"> <span class=\"name\" id=\"language-name\"></span> <ewo-segmented part=\"language\"> <span slot=\"icon-system\">${ICONS.languages}</span> </ewo-segmented> </div> <div class=\"row\"> <span class=\"name\" id=\"theme-name\"></span> <ewo-segmented part=\"theme\"> <span slot=\"icon-system\">${ICONS.monitor}</span> <span slot=\"icon-light\">${ICONS.sun}</span> <span slot=\"icon-dark\">${ICONS.moon}</span> </ewo-segmented> </div>`"
+            }
+          ],
+          "events": [
+            {
+              "description": "`detail: { value }` after a pick; store it, apply it through themeShift.",
+              "name": "language-change"
+            },
+            {
+              "description": "`detail: { value }` after a pick; store it, apply it through themeShift.",
+              "name": "theme-change"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "language",
+              "type": {
+                "text": "'system' | 'de' | 'en'"
+              },
+              "description": "The stored language choice."
+            },
+            {
+              "name": "theme",
+              "type": {
+                "text": "'system' | 'light' | 'dark'"
+              },
+              "description": "The stored theme choice."
+            },
+            {
+              "name": "language-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Overrides \"Language\" / \"Sprache\" (the words follow <html lang>)."
+            },
+            {
+              "name": "theme-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Overrides \"Theme\" / \"Design\"."
+            },
+            {
+              "name": "system-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Overrides \"System\" (both rows)."
+            },
+            {
+              "name": "light-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Overrides \"Light\" / \"Hell\"."
+            },
+            {
+              "name": "dark-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Overrides \"Dark\" / \"Dunkel\"."
+            }
+          ],
+          "superclass": {
+            "name": "EwoElement",
+            "module": "/packages/elements/src/base"
+          },
+          "tagName": "ewo-settings-basics",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "EwoSettingsBasics",
+          "declaration": {
+            "name": "EwoSettingsBasics",
+            "module": "settings-basics.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "settings-button.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The settings button: the sliders icon, the same in every app.",
+          "name": "EwoSettingsButton",
+          "cssParts": [
+            {
+              "description": "The button, for an app's header proportions.",
+              "name": "button"
+            },
+            {
+              "description": "The text beside the icon (with `show-label`).",
+              "name": "label"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[styles]"
+            },
+            {
+              "kind": "field",
+              "name": "#button",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLButtonElement"
+              },
+              "default": "this.root.querySelector('button')!"
+            },
+            {
+              "kind": "field",
+              "name": "#text",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "default": "this.root.querySelector('[part=\"label\"]')!"
+            },
+            {
+              "kind": "field",
+              "name": "#unwatch",
+              "privacy": "private",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ],
+              "description": "Focuses the inner button (after the sheet closes, focus returns here)."
+            },
+            {
+              "kind": "method",
+              "name": "#sync",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "innerHTML",
+              "default": "`<button type=\"button\" part=\"button\">${ICON}<span part=\"label\"></span></button>`"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name and tooltip; by default \"Settings\" / \"Einstellungen\" after <html lang>."
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Also show the label beside the icon above 640px (Fermata's variant).",
+              "name": "show-label"
+            }
+          ],
+          "superclass": {
+            "name": "EwoElement",
+            "module": "/packages/elements/src/base"
+          },
+          "tagName": "ewo-settings-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "EwoSettingsButton",
+          "declaration": {
+            "name": "EwoSettingsButton",
+            "module": "settings-button.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "sheet.js",
       "declarations": [
         {

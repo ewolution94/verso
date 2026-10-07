@@ -30,12 +30,15 @@ var i = t`
   dialog.dragging { transition: none; }
   dialog:not(.dragging) { transition: translate var(--ewo-dur-2) var(--ewo-ease); }
   dialog.closing { animation: down 260ms var(--ewo-ease-io) forwards; }
+  /* Cantina's backdrop, every app's since 2026-10-07 (plans/settings-alignment.md): darkened, with a
+     slight blur, fading in over 300 ms and out over 260 ms. */
   dialog::backdrop {
-    background: rgb(0 0 0 / 0.45);
-    backdrop-filter: blur(2px);
-    animation: fade var(--ewo-dur-3) var(--ewo-ease);
+    background: oklch(0.1 0.01 270 / 0.5);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    animation: fade 300ms var(--ewo-ease);
   }
-  dialog.closing::backdrop { animation: fade 260ms var(--ewo-ease-io) reverse forwards; }
+  dialog.closing::backdrop { animation: fade 260ms var(--ewo-ease) reverse forwards; }
 
   @media (min-width: 720px) {
     dialog {
