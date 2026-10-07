@@ -56,7 +56,6 @@ var a = t`
     :host([placement='top']) dialog { margin-top: 12dvh; }
     dialog[open] { animation-name: pop; }
     dialog.closing { animation-name: unpop; }
-    .grip { display: none; }
   }
 
   @keyframes up { from { translate: 0 100%; } }
@@ -69,6 +68,9 @@ var a = t`
      to hit). The grip is 6 px taller and overlaps the header by as much, so nothing below it moves. */
   .grip { display: grid; place-items: center; height: 28px; margin-bottom: -6px; flex: none; touch-action: none; cursor: grab; }
   .grip span { width: 44px; height: 5px; border-radius: 3px; background: var(--ewo-fill-3); }
+  /* A card from 720px drags nowhere, so no grip. After the rule above: placed with the other 720px
+     rules it lost to it, and every desktop sheet showed a grip that did nothing (until 2026-10-07). */
+  @media (min-width: 720px) { .grip { display: none; } }
 
   header {
     display: flex;
