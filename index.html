@@ -26,8 +26,65 @@
     <meta property="og:image:alt" content="Verso: a playlist whose song titles read Happy Birthday, Thank You, For Everything, See You Later." />
     <meta name="twitter:card" content="summary_large_image" />
     <script src="/boot.js"></script>
+    <!-- splash:start (iOS launch images and the splash's look, written by development/plans/splash-rollout/launch.mjs) -->
+    <link rel="apple-touch-startup-image" href="/splash/light-1320x2868.png" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1260x2736.png" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1206x2622.png" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/light-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) and (prefers-color-scheme: light)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1320x2868.png" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1260x2736.png" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1206x2622.png" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <link rel="apple-touch-startup-image" href="/splash/dark-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) and (prefers-color-scheme: dark)" />
+    <style>
+      /* The splash screen, written by development/plans/splash-rollout/launch.mjs: edit there, not here.
+         The pre-paint script turns it on in the installed app (or with ?splash) and takes it away. It starts
+         as the launch image left off: the mark, 120 pt, in the middle of the screen on the system's page
+         colour (iOS picks the launch image by the system's appearance, not the app's saved theme). Then
+         the mark makes its move, a glint crosses, and the splash fades into the app. Longhands only:
+         Vite's minifier turns an animation shorthand without a name into `animation: none`. The mark's
+         <svg> is 0 × 0 in the markup, so without this style (offline, a blocked file) nothing shows. */
+      #splash { display: none; }
+      .splash #splash { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; background: #09090b; touch-action: none; }
+      @media (prefers-color-scheme: light) { .splash #splash { background: #f5f4f1; } }
+      #splash svg { width: 120px; height: 120px; translate: 0 calc(-1 * var(--splash-lift, 0px)); }
+      #splash :where(g[class], .trace) { transform-box: view-box; animation-duration: 560ms; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); animation-delay: 60ms; animation-fill-mode: both; }
+      #splash .gl { animation-name: splash-glint; animation-duration: 640ms; }
+      @keyframes splash-glint { to { transform: translateX(2000px); } }
+      #splash .p6 { transform-origin: 700px 672px; }
+      #splash :is(.p0, .p1, .p2, .p3, .p4, .p5) { animation-name: splash-ve-r; animation-duration: 420ms; }
+      #splash :is(.p2, .p3) { animation-delay: 130ms; }
+      #splash :is(.p4, .p5) { animation-delay: 200ms; }
+      #splash .p6 { animation-name: splash-ve-d; animation-duration: 640ms; }
+      @keyframes splash-ve-r { 40% { transform: translateX(36px); } }
+      @keyframes splash-ve-d { 62% { transform: scale(1); } 80% { transform: scale(1.5); } }
+      .splash-out #splash { opacity: 0; pointer-events: none; transition: opacity 320ms ease; }
+      .splash-out #splash svg { scale: 1.08; transition: scale 320ms cubic-bezier(0.3, 0, 0.2, 1); }
+      @media (prefers-reduced-motion: reduce) {
+        #splash :where(g[class], .trace) { animation: none; }
+        .splash-out #splash { transition-duration: 200ms; }
+        .splash-out #splash svg { scale: none; }
+      }
+    </style>
+    <!-- splash:end -->
   </head>
   <body>
+    <!-- splash-markup:start -->
+    <div id="splash" aria-hidden="true"><svg width="0" height="0" viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="gAverso" x1="0.25" y1="0" x2="0.75" y2="1"><stop offset="0" stop-color="#c46fdc"/><stop offset="1" stop-color="#7b2598"/></linearGradient><linearGradient id="wAverso" gradientUnits="userSpaceOnUse" x1="0" y1="230" x2="0" y2="800"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef0f6"/></linearGradient><radialGradient id="sAverso" cx="0.5" cy="-0.1" r="0.9"><stop offset="0" stop-color="#fff" stop-opacity="0.22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><filter id="dAverso" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="16" result="b"/><feOffset in="b" dy="14" result="o"/><feFlood flood-color="#3a0a4c" flood-opacity="0.38" result="c"/><feComposite in="c" in2="o" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="cAverso"><rect width="1024" height="1024" rx="232"/></clipPath></defs><g clip-path="url(#cAverso)"><rect width="1024" height="1024" fill="url(#gAverso)"/><rect width="1024" height="1024" fill="url(#sAverso)"/><g filter="url(#dAverso)"><g transform="translate(512 512) scale(1) translate(-512 -512)"><g class="p0"><rect x="232" y="294" width="116" height="116" rx="24" fill="url(#wAverso)"/></g><g class="p1"><path d="M428 352 H772" fill="none" stroke="url(#wAverso)" stroke-width="80" stroke-linecap="round" stroke-linejoin="round" /></g><g class="p2"><rect x="232" y="454" width="116" height="116" rx="24" fill="url(#wAverso)"/></g><g class="p3"><path d="M428 512 H688" fill="none" stroke="url(#wAverso)" stroke-width="80" stroke-linecap="round" stroke-linejoin="round" /></g><g class="p4"><rect x="232" y="614" width="116" height="116" rx="24" fill="url(#wAverso)"/></g><g class="p5"><path d="M428 672 H560" fill="none" stroke="url(#wAverso)" stroke-width="80" stroke-linecap="round" stroke-linejoin="round" /></g><g class="p6"><circle cx="700" cy="672" r="60" fill="#2b0a38" /></g></g></g><defs><linearGradient id="glAverso"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.38"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><g transform="translate(-1000 0)"><g class="gl"><rect x="352" y="-400" width="320" height="1824" fill="url(#glAverso)" transform="rotate(20 512 512)"/></g></g></g></svg></div>
+    <!-- splash-markup:end -->
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
