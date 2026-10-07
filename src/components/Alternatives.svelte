@@ -4,24 +4,35 @@
   import { app } from '../lib/state.svelte';
   import { t } from '../lib/i18n/index.svelte';
 
-  const segment = $derived(app.segments.find((s) => s.key === app.choosing) ?? null);
-  const phrase = $derived(segment ? app.words.slice(segment.i, segment.j).join(' ') : '');
+  // The sheet slides out for 260 ms after app.choosing clears, so it keeps the segment it opened
+  // with until its close event; looked up by key, a new pick shows while it leaves.
+  let shownKey = $state<string | null>(null);
+  $effect(() => {
+    if (app.choosing) shownKey = app.choosing;
+  });
+  const open = $derived(app.segments.some((s) => s.key === app.choosing));
+  const shown = $derived(app.segments.find((s) => s.key === shownKey) ?? null);
+  const phrase = $derived(shown ? app.words.slice(shown.i, shown.j).join(' ') : '');
   const close = () => (app.choosing = null);
+  const closed = () => {
+    shownKey = null;
+    close();
+  };
 </script>
 
-<ewo-sheet open={segment !== null} label={t('alternatives.label', { phrase })} oncancel={close} onclose={close}>
+<ewo-sheet {open} label={t('alternatives.label', { phrase })} oncancel={close} onclose={closed}>
   <span slot="heading">{t('alternatives.heading', { phrase })}</span>
-  {#if segment}
+  {#if shown}
     <ul>
-      {#each segment.tracks as song, k (song.id)}
+      {#each shown.tracks as song, k (song.id)}
         <li>
-          <button class="option" aria-pressed={k === segment.pick} onclick={() => app.choose(segment.key, k)}>
+          <button class="option" aria-pressed={k === shown.pick} onclick={() => app.choose(shown.key, k)}>
             {#if song.image}<img src={song.image} alt="" width="44" height="44" loading="lazy" />{:else}<span class="cover"></span>{/if}
             <span class="text">
               <span class="title">{song.name}</span>
               <span class="sub">{song.artists.join(', ')}{#if song.album}{` · ${song.album}`}{/if}</span>
             </span>
-            {#if k === segment.pick}<Check size={18} />{/if}
+            {#if k === shown.pick}<Check size={18} />{/if}
           </button>
         </li>
       {/each}
