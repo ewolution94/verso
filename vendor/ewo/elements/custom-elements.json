@@ -1094,6 +1094,14 @@
             },
             {
               "kind": "field",
+              "name": "#unlock",
+              "privacy": "private",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "#startY",
               "privacy": "private",
               "type": {
@@ -1136,6 +1144,11 @@
             {
               "kind": "method",
               "name": "#finish",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#release",
               "privacy": "private"
             },
             {

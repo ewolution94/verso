@@ -1,6 +1,7 @@
 import { EwoElement as e, css as t, define as n, reducedMotion as r } from "./base.js";
+import { lockScroll as i } from "./scroll-lock.js";
 //#region packages/elements/src/sheet.ts
-var i = t`
+var a = t`
   :host { display: contents; }
 
   dialog {
@@ -105,23 +106,24 @@ var i = t`
     dialog:not(.with-footer) .body { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
     footer { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
   }
-`, a = class extends e {
-	static styles = [i];
+`, o = class extends e {
+	static styles = [a];
 	static observedAttributes = ["open", "label"];
 	#e;
 	#t = !1;
-	#n = 0;
+	#n;
 	#r = 0;
+	#i = 0;
 	constructor() {
 		super(), this.root.innerHTML = "\n      <dialog part=\"dialog\" tabindex=\"-1\" autofocus>\n        <div class=\"grip\" part=\"grip\" aria-hidden=\"true\"><span></span></div>\n        <header part=\"header\">\n          <div class=\"heading\"><slot name=\"heading\"></slot></div>\n          <button class=\"close\" part=\"close\" type=\"button\" aria-label=\"Close\">\n            <svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M4 4l8 8M12 4l-8 8\"/></svg>\n          </button>\n        </header>\n        <div class=\"body\" part=\"body\"><slot></slot></div>\n        <footer part=\"footer\"><slot name=\"footer\"></slot></footer>\n      </dialog>";
 		let e = this.#e = this.root.querySelector("dialog");
 		e.addEventListener("cancel", (e) => {
-			e.preventDefault(), this.#i();
+			e.preventDefault(), this.#a();
 		}), e.addEventListener("click", (t) => {
-			t.target === e && this.#i();
+			t.target === e && this.#a();
 		}), e.addEventListener("animationend", (t) => {
-			this.#t && t.target === e && this.#o();
-		}), this.root.querySelector(".close").addEventListener("click", () => this.#i());
+			this.#t && t.target === e && this.#s();
+		}), this.root.querySelector(".close").addEventListener("click", () => this.#a());
 		let t = this.root.querySelector("footer"), n = t.querySelector("slot");
 		n.addEventListener("slotchange", () => {
 			let r = n.assignedElements().length > 0;
@@ -129,20 +131,23 @@ var i = t`
 		});
 		let r = this.root.querySelector(".grip");
 		r.addEventListener("pointerdown", (t) => {
-			t.pointerType !== "mouse" && (this.#n = t.clientY, e.classList.add("dragging"), r.setPointerCapture(t.pointerId));
+			t.pointerType !== "mouse" && (this.#r = t.clientY, e.classList.add("dragging"), r.setPointerCapture(t.pointerId));
 		}), r.addEventListener("pointermove", (t) => {
-			e.classList.contains("dragging") && (this.#r = Math.max(0, t.clientY - this.#n), e.style.setProperty("--drag", `${this.#r}px`));
+			e.classList.contains("dragging") && (this.#i = Math.max(0, t.clientY - this.#r), e.style.setProperty("--drag", `${this.#i}px`));
 		});
 		let i = () => {
-			e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#r > 90 ? this.#i() : e.style.setProperty("--drag", "0px"), this.#r = 0);
+			e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#i > 90 ? this.#a() : e.style.setProperty("--drag", "0px"), this.#i = 0);
 		};
 		r.addEventListener("pointerup", i), r.addEventListener("pointercancel", i);
 	}
 	connectedCallback() {
-		this.#a();
+		this.#o();
+	}
+	disconnectedCallback() {
+		this.#c();
 	}
 	attributeChangedCallback(e) {
-		e === "label" ? this.#e.setAttribute("aria-label", this.getAttribute("label") ?? "") : this.isConnected && this.#a();
+		e === "label" ? this.#e.setAttribute("aria-label", this.getAttribute("label") ?? "") : this.isConnected && this.#o();
 	}
 	get open() {
 		return this.flag("open");
@@ -156,21 +161,24 @@ var i = t`
 	close() {
 		this.open = !1;
 	}
-	#i() {
+	#a() {
 		this.emit("cancel", void 0, !0) && this.close();
 	}
-	#a() {
+	#o() {
 		let e = this.#e;
-		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), e.showModal();
+		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), e.showModal(), this.#n ??= i();
 		else if (!this.open && e.open && !this.#t) {
-			if (r()) return this.#o();
-			this.#t = !0, e.classList.add("closing"), setTimeout(() => this.#t && this.#o(), 450);
+			if (r()) return this.#s();
+			this.#t = !0, e.classList.add("closing"), setTimeout(() => this.#t && this.#s(), 450);
 		}
 	}
-	#o() {
-		this.#t = !1, this.#e.classList.remove("closing"), this.#e.open && this.#e.close(), this.emit("close");
+	#s() {
+		this.#t = !1, this.#e.classList.remove("closing"), this.#e.open && this.#e.close(), this.#c(), this.emit("close");
+	}
+	#c() {
+		this.#n?.(), this.#n = void 0;
 	}
 };
-n("ewo-sheet", a);
+n("ewo-sheet", o);
 //#endregion
-export { a as EwoSheet };
+export { o as EwoSheet };
