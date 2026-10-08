@@ -2,6 +2,15 @@
    monochrome defaults: the album covers bring the colour. */
 @import '../vendor/ewo/tokens/tokens.css';
 
+/* Two quick taps on a control must not zoom the page: iOS Safari's double-tap zoom also made
+   sticky headers look stuck mid-page (learnings/ios-and-webkit.md, 2026-10-08). On the controls,
+   not <html>, which Safari ignores once it has an overflow. Zero specificity, so a component's own
+   touch-action (a canvas, a drag handle) still wins. */
+:where(button, a, label, summary, input, select, textarea, [role='button'], [role='radio']) {
+  touch-action: manipulation;
+}
+
+
 :root {
   --ewo-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ewo-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
