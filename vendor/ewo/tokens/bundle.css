@@ -204,6 +204,13 @@
      dark side lightens the indigo to moonlight for contrast on the night page. */
   --ewo-project-vollmond:   light-dark(#1f2668, #a8b0ff);
   --ewo-project-vollmond-2: light-dark(#b3124f, #ff4d9d);
+  /* Kritzle's highlighter lime (deepened to olive on paper) and its washi-tape coral; the app
+     itself is light only. */
+  --ewo-project-kritzle:   light-dark(#4f6b05, #c8f53c);
+  --ewo-project-kritzle-2: light-dark(#b8452a, #ff8f70);
+  /* CDNMS: the case file's ochre (manila on dark pages) and the stamp's red. */
+  --ewo-project-cdnms:   light-dark(#8a6a2a, #e3cf9c);
+  --ewo-project-cdnms-2: light-dark(#b32d27, #ff6b5e);
 }
 
 [data-ewo-project='clinch']  { --ewo-accent: var(--ewo-project-clinch);  --ewo-accent-2: var(--ewo-project-clinch-2); }
@@ -217,6 +224,8 @@
 [data-ewo-project='schaetzle'] { --ewo-accent: var(--ewo-project-schaetzle); --ewo-accent-2: var(--ewo-project-schaetzle-2); }
 [data-ewo-project='verso'] { --ewo-accent: var(--ewo-project-verso); --ewo-accent-2: var(--ewo-project-verso-2); }
 [data-ewo-project='vollmond'] { --ewo-accent: var(--ewo-project-vollmond); --ewo-accent-2: var(--ewo-project-vollmond-2); }
+[data-ewo-project='kritzle'] { --ewo-accent: var(--ewo-project-kritzle); --ewo-accent-2: var(--ewo-project-kritzle-2); }
+[data-ewo-project='cdnms'] { --ewo-accent: var(--ewo-project-cdnms); --ewo-accent-2: var(--ewo-project-cdnms-2); }
 [data-ewo-project='cantina'],
 [data-ewo-project='census'],
 [data-ewo-project='landing'] { --ewo-accent: var(--ewo-fg-2); --ewo-accent-2: var(--ewo-fg); }

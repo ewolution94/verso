@@ -10,6 +10,12 @@ export { EwoThemeToggle, setTheme, storedTheme, restoreTheme, type ThemeChoice }
 export { EwoHalftone } from './halftone';
 export { themeShift } from './theme-shift';
 export { lockScroll } from './scroll-lock';
+export { pressFeedback, holdPress, releasePress, type PressPreset } from './press';
+export { track, configureWaiting, isRetryable, WaitTimeout, type WaitOptions } from './waiting';
+export { EwoConnection, type ConnectionState } from './connection';
 export { EwoSettingsButton } from './settings-button';
 export { EwoSettingsBasics, type LanguageChoice, type ThemeChoice as SettingsThemeChoice } from './settings-basics';
+export { EwoEmblem } from './emblem';
+export { EwoEmblemMaker } from './emblem-maker';
+export { cleanEmblem, emblemFromSeed, emblemNames, emblemRanges, emblemSvg, isEmblem, randomEmblem, type EmblemThemeId } from './emblem-core';
 export { effectiveTheme, onThemeChange } from './base';

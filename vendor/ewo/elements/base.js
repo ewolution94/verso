@@ -12,7 +12,16 @@ var t = e`
   :host([hidden]) { display: none !important; }
   *, *::before, *::after { box-sizing: inherit; }
   :focus-visible { outline: var(--ewo-focus); outline-offset: 2px; }
-  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
+  /* manipulation: no double-tap zoom on a control tapped twice quickly (iOS zoomed the page on the
+     emblem maker's arrows, 2026-10-08); panning and pinch zoom still work. */
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; touch-action: manipulation; }
+  /* Tap feedback from pressFeedback() (press.ts) reaches Folio's own buttons too; the tokens come
+     from the page, with the calm values as fallbacks. */
+  [data-pressed] { opacity: var(--ewo-press-opacity, 0.82); transition: scale var(--ewo-press-in, 70ms), opacity var(--ewo-press-in, 70ms) !important; }
+  [data-pressed='box'] { scale: var(--ewo-press-scale, 0.96); }
+  [data-pressed='large'] { scale: var(--ewo-press-scale-large, 0.985); }
+  [data-released] { transition: scale var(--ewo-press-out, 220ms), opacity var(--ewo-press-out, 220ms) !important; }
+  @media (prefers-reduced-motion: reduce) { [data-pressed] { scale: none; } }
 `, n = class extends HTMLElement {
 	static styles = [];
 	root;

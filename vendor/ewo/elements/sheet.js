@@ -111,7 +111,22 @@ var a = t`
     dialog:not(.with-footer) .body { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
     footer { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
   }
-`, o = class extends e {
+`, o = !1, s = null, c = !1;
+function l() {
+	c || (c = !0, addEventListener("keydown", (e) => !e.metaKey && !e.ctrlKey && !e.altKey && (o = !0), !0), addEventListener("pointerdown", () => o = !1, !0), addEventListener("click", (e) => {
+		let t = e.composedPath().find((e) => e instanceof HTMLElement && e.matches("button, a[href], summary, [role='button'], [tabindex]"));
+		t && (s = {
+			el: t,
+			at: performance.now()
+		});
+	}, !0));
+}
+function u() {
+	let e = document.activeElement;
+	for (; e?.shadowRoot?.activeElement;) e = e.shadowRoot.activeElement;
+	return e && e !== document.body ? e : null;
+}
+var d = class extends e {
 	static styles = [a];
 	static observedAttributes = ["open", "label"];
 	#e;
@@ -119,16 +134,17 @@ var a = t`
 	#n;
 	#r = 0;
 	#i = 0;
+	#a = null;
 	constructor() {
 		super(), this.root.innerHTML = "\n      <dialog part=\"dialog\" tabindex=\"-1\" autofocus>\n        <div class=\"grip\" part=\"grip\" aria-hidden=\"true\"><span></span></div>\n        <header part=\"header\">\n          <div class=\"heading\"><slot name=\"heading\"></slot></div>\n          <button class=\"close\" part=\"close\" type=\"button\" aria-label=\"Close\">\n            <svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M4 4l8 8M12 4l-8 8\"/></svg>\n          </button>\n        </header>\n        <div class=\"body\" part=\"body\"><slot></slot></div>\n        <footer part=\"footer\"><slot name=\"footer\"></slot></footer>\n      </dialog>";
 		let e = this.#e = this.root.querySelector("dialog");
 		e.addEventListener("cancel", (e) => {
-			e.preventDefault(), this.#a();
+			e.preventDefault(), this.#o();
 		}), e.addEventListener("click", (t) => {
-			t.target === e && this.#a();
+			t.target === e && this.#o();
 		}), e.addEventListener("animationend", (t) => {
-			this.#t && t.target === e && this.#s();
-		}), this.root.querySelector(".close").addEventListener("click", () => this.#a());
+			this.#t && t.target === e && this.#c();
+		}), this.root.querySelector(".close").addEventListener("click", () => this.#o());
 		let t = this.root.querySelector("footer"), n = t.querySelector("slot");
 		n.addEventListener("slotchange", () => {
 			let r = n.assignedElements().length > 0;
@@ -142,19 +158,19 @@ var a = t`
 				e.classList.contains("dragging") && (this.#i = Math.max(0, t.clientY - this.#r), e.style.setProperty("--drag", `${this.#i}px`));
 			});
 			let n = () => {
-				e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#i > 90 ? this.#a() : e.style.setProperty("--drag", "0px"), this.#i = 0);
+				e.classList.contains("dragging") && (e.classList.remove("dragging"), this.#i > 90 ? this.#o() : e.style.setProperty("--drag", "0px"), this.#i = 0);
 			};
 			t.addEventListener("pointerup", n), t.addEventListener("pointercancel", n);
 		}
 	}
 	connectedCallback() {
-		this.#o();
+		l(), this.#s();
 	}
 	disconnectedCallback() {
-		this.#c();
+		this.#d();
 	}
 	attributeChangedCallback(e) {
-		e === "label" ? this.#e.setAttribute("aria-label", this.getAttribute("label") ?? "") : this.isConnected && this.#o();
+		e === "label" ? this.#e.setAttribute("aria-label", this.getAttribute("label") ?? "") : this.isConnected && this.#s();
 	}
 	get open() {
 		return this.flag("open");
@@ -168,24 +184,36 @@ var a = t`
 	close() {
 		this.open = !1;
 	}
-	#a() {
+	#o() {
 		this.emit("cancel", void 0, !0) && this.close();
 	}
-	#o() {
+	#s() {
 		let e = this.#e;
-		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), e.showModal(), this.#n ??= i();
+		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), l(), this.#a = u() ?? (s && performance.now() - s.at < 1e3 ? s.el : null), e.showModal(), this.#n ??= i();
 		else if (!this.open && e.open && !this.#t) {
-			if (r()) return this.#s();
-			this.#t = !0, e.classList.add("closing"), setTimeout(() => this.#t && this.#s(), 450);
+			if (r()) return this.#c();
+			this.#t = !0, e.classList.add("closing"), setTimeout(() => this.#t && this.#c(), 450);
 		}
 	}
-	#s() {
-		this.#t = !1, this.#e.classList.remove("closing"), this.#e.open && this.#e.close(), this.#c(), this.emit("close");
-	}
 	#c() {
+		this.#t = !1, this.#e.classList.remove("closing");
+		let e = !o;
+		e && this.#l(), this.#e.open && this.#e.close(), this.#u(e), this.#d(), this.emit("close");
+	}
+	#l() {
+		let e = u();
+		e && (e === this.#e || this.contains(e) || this.root.contains(e)) && e.blur();
+	}
+	#u(e) {
+		let t = this.#a;
+		if (this.#a = null, !t?.isConnected) return;
+		let n = u();
+		(!n || n === this.#e) && t.focus({ focusVisible: !e });
+	}
+	#d() {
 		this.#n?.(), this.#n = void 0;
 	}
 };
-n("ewo-sheet", o);
+n("ewo-sheet", d);
 //#endregion
-export { o as EwoSheet };
+export { d as EwoSheet };
