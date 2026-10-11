@@ -134,7 +134,12 @@ async function serveStatic(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
-  if (req.url === '/healthz') return res.writeHead(200, { 'content-type': 'text/plain' }).end('ok');
+  // Spotify requests that never let go of their slots leave every search waiting, and nothing on
+  // the page can tell. 503 is what Docker and Pulse can tell (neither restarts anything).
+  if (req.url === '/healthz') {
+    const ok = api.healthy();
+    return res.writeHead(ok ? 200 : 503, { 'content-type': 'text/plain' }).end(ok ? 'ok' : 'spotify requests stuck');
+  }
 
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) res.setHeader(name, value);
 

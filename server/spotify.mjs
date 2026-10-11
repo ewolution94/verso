@@ -10,6 +10,7 @@
 // page; playlists are created with POST /me/playlists and filled through /playlists/{id}/items.
 
 import crypto from 'node:crypto';
+import { withDeadline } from './deadline.mjs';
 
 export const SCOPES = ['playlist-modify-public', 'playlist-modify-private'];
 const ACCOUNTS = 'https://accounts.spotify.com';
@@ -35,10 +36,12 @@ export function pkcePair() {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency = 3, log = console }) {
+export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency = 3, timeout = 15_000, log = console }) {
   let active = 0;
   const waiting = [];
   let pausedUntil = 0;
+  /** When each request now holding a slot was sent. */
+  const sent = new Set();
 
   async function slot() {
     if (active >= concurrency) await new Promise((resolve) => waiting.push(resolve));
@@ -49,16 +52,32 @@ export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency 
     waiting.shift()?.();
   }
 
+  /**
+   * One request, headers and body, on our clock (server/deadline.mjs). The abort signal alone
+   * isn't the guarantee: on 2026-10-09 one of Clinch's requests never settled although it had
+   * been aborted, and here a request that never settles keeps its slot. Three of them and every
+   * search and playlist, for every user, waits forever. Waiting for a slot or for a 429's pause
+   * happens before this and doesn't count.
+   * @returns {Promise<{ status: number, ok: boolean, headers: Headers, text: string }>}
+   */
   async function send(url, init) {
+    let signal;
     try {
-      return await fetch(url, { ...init, signal: AbortSignal.timeout(15_000) });
+      return await withDeadline(timeout, async (s) => {
+        signal = s;
+        const res = await fetch(url, { ...init, signal });
+        return { status: res.status, ok: res.ok, headers: res.headers, text: await res.text() };
+      });
     } catch (err) {
-      throw new SpotifyError(0, err?.name === 'TimeoutError' ? 'timeout' : 'network');
+      throw new SpotifyError(0, signal?.aborted || err?.name === 'TimeoutError' ? 'timeout' : 'network');
     }
   }
 
-  async function readError(res) {
-    const body = await res.json().catch(() => null);
+  function readError(res) {
+    let body = null;
+    try {
+      body = JSON.parse(res.text);
+    } catch {}
     // The accounts service answers { error: 'invalid_grant', error_description }, the Web API
     // { error: { status, message } }.
     const code = typeof body?.error === 'string' ? body.error : body?.error?.message;
@@ -79,10 +98,13 @@ export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency 
       const wait = pausedUntil - Date.now();
       if (wait > 0) await sleep(wait);
       await slot();
+      const at = { since: Date.now() };
+      sent.add(at);
       let res;
       try {
         res = await send(url, init);
       } finally {
+        sent.delete(at);
         release();
       }
       if (res.status === 429 && attempt < 4) {
@@ -95,10 +117,9 @@ export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency 
         await sleep(500);
         continue;
       }
-      if (!res.ok) throw await readError(res);
+      if (!res.ok) throw readError(res);
       if (res.status === 204) return null;
-      const text = await res.text();
-      return text ? JSON.parse(text) : null;
+      return res.text ? JSON.parse(res.text) : null;
     }
   }
 
@@ -108,8 +129,8 @@ export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency 
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ client_id: clientId, ...params }),
     });
-    if (!res.ok) throw await readError(res);
-    const json = await res.json();
+    if (!res.ok) throw readError(res);
+    const json = JSON.parse(res.text);
     return {
       accessToken: json.access_token,
       // With PKCE Spotify may rotate the refresh token; keep the old one if it doesn't.
@@ -133,5 +154,15 @@ export function createSpotify({ clientId, fetch = globalThis.fetch, concurrency 
       token({ grant_type: 'authorization_code', code, redirect_uri: redirectUri, code_verifier: verifier }),
     refresh: (refreshToken) => token({ grant_type: 'refresh_token', refresh_token: refreshToken }),
     call,
+    /**
+     * A request has held its slot for longer than its deadline allows, which send() rules out,
+     * so this is true only if something else holds one. Spotify answering 429 or 5xx is calls
+     * failing, which is this working. `/healthz` answers 503 on it.
+     */
+    get stuck() {
+      const now = Date.now();
+      for (const at of sent) if (now - at.since > timeout + 60_000) return true;
+      return false;
+    },
   };
 }

@@ -181,7 +181,7 @@ export function createApi({ clientId, origin, dataDir, market = 'DE', mock = fal
     });
   }
 
-  return async function api(req, res, next) {
+  async function api(req, res, next) {
     const url = new URL(req.url ?? '/', 'http://local');
     const route = `${req.method} ${url.pathname}`;
     if (!url.pathname.startsWith('/auth/') && !url.pathname.startsWith('/api/')) return next();
@@ -220,5 +220,8 @@ export function createApi({ clientId, origin, dataDir, market = 'DE', mock = fal
       log.error(err);
       return send(res, 500, { error: 'internal' });
     }
-  };
+  }
+  /** Whether Spotify's request slots still come free (spotify.mjs → stuck), for `/healthz`. */
+  api.healthy = () => !spotify.stuck;
+  return api;
 }
