@@ -211,6 +211,13 @@
   /* CDNMS: the case file's ochre (manila on dark pages) and the stamp's red. */
   --ewo-project-cdnms:   light-dark(#8a6a2a, #e3cf9c);
   --ewo-project-cdnms-2: light-dark(#b32d27, #ff6b5e);
+  /* Stichle: the card table's green baize and the compass rose's gold; the app itself is light
+     only. */
+  --ewo-project-stichle:   light-dark(#1f5a3c, #7fd3a4);
+  --ewo-project-stichle-2: light-dark(#8a6420, #e9c66a);
+  /* Stammtisch (2026-10-13): bordeaux leads, the baize green second. */
+  --ewo-project-stammtisch:   light-dark(#5b1427, #c2566d);
+  --ewo-project-stammtisch-2: light-dark(#2f6b4f, #5fae86);
 }
 
 [data-ewo-project='clinch']  { --ewo-accent: var(--ewo-project-clinch);  --ewo-accent-2: var(--ewo-project-clinch-2); }
@@ -226,6 +233,8 @@
 [data-ewo-project='vollmond'] { --ewo-accent: var(--ewo-project-vollmond); --ewo-accent-2: var(--ewo-project-vollmond-2); }
 [data-ewo-project='kritzle'] { --ewo-accent: var(--ewo-project-kritzle); --ewo-accent-2: var(--ewo-project-kritzle-2); }
 [data-ewo-project='cdnms'] { --ewo-accent: var(--ewo-project-cdnms); --ewo-accent-2: var(--ewo-project-cdnms-2); }
+[data-ewo-project='stichle'] { --ewo-accent: var(--ewo-project-stichle); --ewo-accent-2: var(--ewo-project-stichle-2); }
+[data-ewo-project='stammtisch'] { --ewo-accent: var(--ewo-project-stammtisch); --ewo-accent-2: var(--ewo-project-stammtisch-2); }
 [data-ewo-project='cantina'],
 [data-ewo-project='census'],
 [data-ewo-project='landing'] { --ewo-accent: var(--ewo-fg-2); --ewo-accent-2: var(--ewo-fg); }

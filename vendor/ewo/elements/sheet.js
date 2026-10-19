@@ -1,7 +1,8 @@
 import { EwoElement as e, css as t, define as n, reducedMotion as r } from "./base.js";
 import { lockScroll as i } from "./scroll-lock.js";
+import { lastInputWasKey as a, letGo as o, openerNow as s, returnFocus as c, trackInput as l } from "./modal-focus.js";
 //#region packages/elements/src/sheet.ts
-var a = t`
+var u = t`
   :host { display: contents; }
 
   dialog {
@@ -60,14 +61,20 @@ var a = t`
 
   @keyframes up { from { translate: 0 100%; } }
   @keyframes down { to { translate: 0 100%; } }
-  @keyframes pop { from { opacity: 0; scale: 0.96; } }
+  /* A rise, not a grow (2026-10-15): after a scale-in, Chrome kept the paint it made while scaling
+     whenever the centred dialog sat on a half pixel, and drew segmented tracks 1 px off their pills
+     until something repainted them (Stichle's settings, a DPR-1 screen). */
+  @keyframes pop { from { opacity: 0; translate: 0 10px; } }
   @keyframes unpop { to { opacity: 0; scale: 0.97; } }
   @keyframes fade { from { opacity: 0; } }
 
   /* The sheet is dragged down by the grip or the header (2026-10-07: the 22 px grip alone was hard
      to hit). The grip is 6 px taller and overlaps the header by as much, so nothing below it moves. */
   .grip { display: grid; place-items: center; height: 28px; margin-bottom: -6px; flex: none; touch-action: none; cursor: grab; }
-  .grip span { width: 44px; height: 5px; border-radius: 3px; background: var(--ewo-fill-3); }
+  /* Light mode's grip is as strong as iOS's own grabber (its tertiary label, about 30%): at the 10%
+     of --ewo-fill-3 it all but vanished on a white sheet, and on Clinch's pale team colours
+     (2026-10-19). Dark mode keeps the fill, as the token, so it stays exactly what it was. */
+  .grip span { width: 44px; height: 5px; border-radius: 3px; background: light-dark(rgb(19 19 21 / 0.3), var(--ewo-fill-3)); }
   /* A card from 720px drags nowhere, so no grip. After the rule above: placed with the other 720px
      rules it lost to it, and every desktop sheet showed a grip that did nothing (until 2026-10-07). */
   @media (min-width: 720px) { .grip { display: none; } }
@@ -111,23 +118,8 @@ var a = t`
     dialog:not(.with-footer) .body { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
     footer { padding-bottom: calc(env(safe-area-inset-bottom) + 76px); }
   }
-`, o = !1, s = null, c = !1;
-function l() {
-	c || (c = !0, addEventListener("keydown", (e) => !e.metaKey && !e.ctrlKey && !e.altKey && (o = !0), !0), addEventListener("pointerdown", () => o = !1, !0), addEventListener("click", (e) => {
-		let t = e.composedPath().find((e) => e instanceof HTMLElement && e.matches("button, a[href], summary, [role='button'], [tabindex]"));
-		t && (s = {
-			el: t,
-			at: performance.now()
-		});
-	}, !0));
-}
-function u() {
-	let e = document.activeElement;
-	for (; e?.shadowRoot?.activeElement;) e = e.shadowRoot.activeElement;
-	return e && e !== document.body ? e : null;
-}
-var d = class extends e {
-	static styles = [a];
+`, d = class extends e {
+	static styles = [u];
 	static observedAttributes = ["open", "label"];
 	#e;
 	#t = !1;
@@ -189,7 +181,7 @@ var d = class extends e {
 	}
 	#s() {
 		let e = this.#e;
-		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), l(), this.#a = u() ?? (s && performance.now() - s.at < 1e3 ? s.el : null), e.showModal(), this.#n ??= i();
+		if (this.open && !e.open) this.#t = !1, e.classList.remove("closing"), e.style.setProperty("--drag", "0px"), l(), this.#a = s(), e.showModal(), this.#n ??= i();
 		else if (!this.open && e.open && !this.#t) {
 			if (r()) return this.#c();
 			this.#t = !0, e.classList.add("closing"), setTimeout(() => this.#t && this.#c(), 450);
@@ -197,18 +189,15 @@ var d = class extends e {
 	}
 	#c() {
 		this.#t = !1, this.#e.classList.remove("closing");
-		let e = !o;
+		let e = !a();
 		e && this.#l(), this.#e.open && this.#e.close(), this.#u(e), this.#d(), this.emit("close");
 	}
 	#l() {
-		let e = u();
-		e && (e === this.#e || this.contains(e) || this.root.contains(e)) && e.blur();
+		o(this, this.root, this.#e);
 	}
 	#u(e) {
 		let t = this.#a;
-		if (this.#a = null, !t?.isConnected) return;
-		let n = u();
-		(!n || n === this.#e) && t.focus({ focusVisible: !e });
+		this.#a = null, c(t, this.#e, e);
 	}
 	#d() {
 		this.#n?.(), this.#n = void 0;

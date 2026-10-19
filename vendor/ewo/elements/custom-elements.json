@@ -822,6 +822,435 @@
     },
     {
       "kind": "javascript-module",
+      "path": "guide.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A how-to in full-screen pages: swipe, the dots, Back and Next; Done on the last.",
+          "name": "EwoGuide",
+          "cssProperties": [
+            {
+              "name": "--ewo-guide-bg"
+            },
+            {
+              "name": "--ewo-guide-fg"
+            },
+            {
+              "name": "--ewo-guide-fg-2"
+            },
+            {
+              "name": "--ewo-guide-accent"
+            },
+            {
+              "name": "--ewo-guide-accent-ink"
+            },
+            {
+              "name": "--ewo-guide-dot"
+            },
+            {
+              "name": "--ewo-guide-dot-on"
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "dialog"
+            },
+            {
+              "name": "track"
+            },
+            {
+              "name": "footer"
+            },
+            {
+              "name": "skip"
+            },
+            {
+              "name": "back"
+            },
+            {
+              "name": "next"
+            },
+            {
+              "name": "dots"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The pages: one child each (an aria-label or its first heading names it).",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[styles]"
+            },
+            {
+              "kind": "field",
+              "name": "#dialog",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLDialogElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#track",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#slot",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLSlotElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#dots",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#back",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLButtonElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#next",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLButtonElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#skip",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLButtonElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#live",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#index",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#frame",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#heading",
+              "privacy": "private",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "description": "The page a goTo() scroll is on its way to; the pages it passes on the way don't count."
+            },
+            {
+              "kind": "field",
+              "name": "#headingTimer",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#closing",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#unlock",
+              "privacy": "private",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#opener",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#unlang",
+              "privacy": "private",
+              "type": {
+                "text": "() => void | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "description": "The page shown, from 0.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "show"
+            },
+            {
+              "kind": "method",
+              "name": "close"
+            },
+            {
+              "kind": "method",
+              "name": "goTo",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Turns to a page (clamped); at once, with a fade, under reduced motion."
+            },
+            {
+              "kind": "method",
+              "name": "#arrived",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#pages",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#words",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#title",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "Element | undefined"
+                  }
+                }
+              ],
+              "description": "The page's name: its aria-label, else its first heading."
+            },
+            {
+              "kind": "method",
+              "name": "#render",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#show",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "i",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "#state",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "say",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "The buttons and dots for the page shown; `say` announces it."
+            },
+            {
+              "kind": "method",
+              "name": "#requestClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#sync",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#finish",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#release",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "innerHTML",
+              "default": "` <dialog part=\"dialog\" tabindex=\"-1\" autofocus aria-roledescription=\"guide\"> <div class=\"top\"><button class=\"skip\" part=\"skip\" type=\"button\"></button></div> <div class=\"track\" part=\"track\"><slot></slot></div> <p class=\"live\" aria-live=\"polite\"></p> <footer part=\"footer\"> <button class=\"back\" part=\"back\" type=\"button\"></button> <div class=\"dots\" part=\"dots\" role=\"group\"></div> <button class=\"next\" part=\"next\" type=\"button\"></button> </footer> </dialog>`"
+            }
+          ],
+          "events": [
+            {
+              "description": "Cancelable: Escape, Skip or the backdrop asked to close.",
+              "name": "cancel"
+            },
+            {
+              "description": "The last page's button was pressed.",
+              "name": "done"
+            },
+            {
+              "description": "The page shown changed; `detail.index`.",
+              "name": "page"
+            },
+            {
+              "description": "After it has closed.",
+              "name": "close"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the guide."
+            },
+            {
+              "name": "next-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Instead of \"Next\"."
+            },
+            {
+              "name": "back-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Instead of \"Back\"."
+            },
+            {
+              "name": "done-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The last page's button, instead of \"Done\"."
+            },
+            {
+              "name": "skip-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Instead of \"Skip\"."
+            }
+          ],
+          "superclass": {
+            "name": "EwoElement",
+            "module": "/packages/elements/src/base"
+          },
+          "tagName": "ewo-guide",
+          "customElement": true
+        },
+        {
+          "kind": "function",
+          "name": "firstVisit",
+          "return": {
+            "type": {
+              "text": "boolean"
+            }
+          },
+          "parameters": [
+            {
+              "name": "key",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "True on a device's first visit (and remembers it); false after, or when storage is unavailable."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "EwoGuide",
+          "declaration": {
+            "name": "EwoGuide",
+            "module": "guide.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "firstVisit",
+          "declaration": {
+            "name": "firstVisit",
+            "module": "guide.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "halftone.js",
       "declarations": [
         {
@@ -1635,8 +2064,40 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "A modal: a bottom sheet on phones, a centred card from 720px.",
           "name": "EwoSheet",
+          "cssParts": [
+            {
+              "name": "dialog"
+            },
+            {
+              "name": "header"
+            },
+            {
+              "name": "body"
+            },
+            {
+              "name": "footer"
+            },
+            {
+              "name": "close"
+            },
+            {
+              "name": "grip"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The content (scrolls).",
+              "name": ""
+            },
+            {
+              "name": "heading"
+            },
+            {
+              "name": "footer"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -1746,7 +2207,7 @@
                   }
                 }
               ],
-              "description": "Focus ends on the opener, never on the page (VoiceOver and Switch Control rely on it): the\ndialog's own return happens only when focus was inside it, and Safari's opener was never focused."
+              "description": "Focus ends on the opener, never on the page (modal-focus.ts)."
             },
             {
               "kind": "method",
@@ -1759,18 +2220,51 @@
               "default": "` <dialog part=\"dialog\" tabindex=\"-1\" autofocus> <div class=\"grip\" part=\"grip\" aria-hidden=\"true\"><span></span></div> <header part=\"header\"> <div class=\"heading\"><slot name=\"heading\"></slot></div> <button class=\"close\" part=\"close\" type=\"button\" aria-label=\"Close\"> <svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M4 4l8 8M12 4l-8 8\"/></svg> </button> </header> <div class=\"body\" part=\"body\"><slot></slot></div> <footer part=\"footer\"><slot name=\"footer\"></slot></footer> </dialog>`"
             }
           ],
-          "attributes": [
+          "events": [
             {
-              "name": "open"
+              "description": "Cancelable: Escape, backdrop, close button or drag asked to close.",
+              "name": "cancel"
             },
             {
-              "name": "label"
+              "description": "After it has closed.",
+              "name": "close"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the dialog."
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "720px instead of 480px on desktop.",
+              "name": "wide"
+            },
+            {
+              "type": {
+                "text": "'center' | 'top'"
+              },
+              "description": "`top` anchors it high (a search palette).",
+              "name": "placement"
             }
           ],
           "superclass": {
             "name": "EwoElement",
             "module": "/packages/elements/src/base"
-          }
+          },
+          "tagName": "ewo-sheet",
+          "customElement": true
         }
       ],
       "exports": [

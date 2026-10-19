@@ -820,7 +820,7 @@ var j = (e) => e.map(([e, t]) => ({
 	frames: 3,
 	svg(e, { frame: t = 0, mood: n = "", crown: r = !1 } = {}) {
 		let [i, l, u, d, f] = e, p = T[i]?.[2]() ?? {}, m = D[u]?.[2]() ?? {};
-		return `<svg viewBox="0 0 100 100" aria-hidden="true">${o([
+		return `<svg viewBox="0 0 100 100" aria-hidden="true"><g transform="matrix(0.97 0 0 0.97 1.5 4.5)">${o([
 			...p.back ?? [],
 			{
 				p: a(50, 56, 33, 31, 22),
@@ -836,7 +836,7 @@ var j = (e) => e.map(([e, t]) => ({
 			...O[n === "happy" ? 9 : d]?.[2]() ?? [],
 			...m.mouth ?? [],
 			...r ? k : []
-		], A(e) * 3 + t)}</svg>`;
+		], A(e) * 3 + t)}</g></svg>`;
 	},
 	fromSeed(e) {
 		return [
