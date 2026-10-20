@@ -4,7 +4,7 @@
 # which would make Portainer compile Verso on the NAS instead of pulling the image
 # CI already published.
 #
-# Auto-updates come from the shared Watchtower stack (clinch/deploy/watchtower-stack.yml),
+# Auto-updates come from the shared Watchtower stack (development/.claude/skills/portainer/watchtower/),
 # which only touches containers carrying the label below. With it, a push to `release`
 # is the entire deploy.
 
